@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>反応時間テスト</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    button { font-size: 1.5em; margin: 20px; padding: 10px 20px; }
+    #output { font-size: 1.2em; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>反応時間テスト</h1>
+  <button onclick="startTest('sound')">音に反応</button>
+  <button onclick="startTest('light')">光に反応</button>
+  <div id="output"></div>
+
+  <script>
+    let startTime;
+    let waiting = false;
+
+    function startTest(type) {
+      const output = document.getElementById('output');
+      output.innerText = '準備して…';
+
+      const delay = Math.random() * 3000 + 2000;
+      waiting = true;
+
+      setTimeout(() => {
+        startTime = new Date();
+
+        if (type === 'sound') {
+          const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+          audio.play();
+        } else {
+          document.body.style.backgroundColor = 'yellow';
+        }
+
+        output.innerText = '今だ！ボタンを押して！';
+
+        document.body.onclick = () => {
+          if (!waiting) return;
+          const reactionTime = new Date() - startTime;
+          output.innerText = `反応時間：${reactionTime} ミリ秒`;
+          document.body.style.backgroundColor = '';
+          document.body.onclick = null;
+          waiting = false;
+        };
+      }, delay);
+    }
+  </script>
+</body>
+</html>
