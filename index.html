@@ -1,31 +1,47 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>反応時間テスト</title>
+  <meta charset="UTF-8" />
+  <title>反応時間テスト（音確認付き）</title>
   <style>
     body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-    button { font-size: 1.5em; margin: 20px; padding: 10px 20px; }
+    button { font-size: 1.3em; margin: 15px; padding: 12px 25px; }
     #output { font-size: 1.2em; margin-top: 30px; }
   </style>
 </head>
 <body>
-  <h1>反応時間テスト</h1>
-  <button onclick="startTest('sound')">音に反応</button>
-  <button onclick="startTest('light')">光に反応</button>
+  <h1>反応時間テスト（音確認付き）</h1>
+
+  <button id="playBeepBtn">まずここを押して音を鳴らそう！</button>
+  <div id="testButtons" style="display:none;">
+    <button onclick="startTest('sound')">音に反応</button>
+    <button onclick="startTest('light')">光に反応</button>
+  </div>
+
   <div id="output"></div>
 
   <audio id="beep" preload="auto">
-    <source src="https://freesound.org/data/previews/341/341695_5260877-lq.mp3" type="audio/mpeg">
+    <source src="https://freesound.org/data/previews/341/341695_5260877-lq.mp3" type="audio/mpeg" />
     ブラウザが音声に対応していません。
   </audio>
 
   <script>
+    const beep = document.getElementById('beep');
+    const playBeepBtn = document.getElementById('playBeepBtn');
+    const testButtons = document.getElementById('testButtons');
+    const output = document.getElementById('output');
+
     let startTime;
     let waiting = false;
 
+    playBeepBtn.addEventListener('click', () => {
+      beep.play();
+      alert('音が鳴りました！これで音の反応テストが使えます。');
+      playBeepBtn.style.display = 'none';
+      testButtons.style.display = 'block';
+    });
+
     function startTest(type) {
-      const output = document.getElementById('output');
       output.innerText = '準備して…';
       document.body.style.backgroundColor = '';
 
@@ -36,7 +52,6 @@
         startTime = new Date();
 
         if (type === 'sound') {
-          const beep = document.getElementById('beep');
           beep.currentTime = 0;
           beep.play();
         } else {
