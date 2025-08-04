@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>反応時間テスト</title>
   <style>
     body { font-family: sans-serif; text-align: center; margin-top: 50px; }
@@ -15,6 +15,11 @@
   <button onclick="startTest('light')">光に反応</button>
   <div id="output"></div>
 
+  <audio id="beep" preload="auto">
+    <source src="https://freesound.org/data/previews/341/341695_5260877-lq.mp3" type="audio/mpeg">
+    ブラウザが音声に対応していません。
+  </audio>
+
   <script>
     let startTime;
     let waiting = false;
@@ -22,6 +27,7 @@
     function startTest(type) {
       const output = document.getElementById('output');
       output.innerText = '準備して…';
+      document.body.style.backgroundColor = '';
 
       const delay = Math.random() * 3000 + 2000;
       waiting = true;
@@ -30,13 +36,14 @@
         startTime = new Date();
 
         if (type === 'sound') {
-          const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
-          audio.play();
+          const beep = document.getElementById('beep');
+          beep.currentTime = 0;
+          beep.play();
         } else {
           document.body.style.backgroundColor = 'yellow';
         }
 
-        output.innerText = '今だ！ボタンを押して！';
+        output.innerText = '今だ！画面をタップ！';
 
         document.body.onclick = () => {
           if (!waiting) return;
